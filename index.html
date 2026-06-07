@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkThree</title>
+    <style>
+    /* variaveis globais */
+    :root {
+      --text-name:   #ffffff;
+      --text-bio:    #a0a4b0;
+      --text-link:   #c8ccd8;
+      --text-footer: #555870;
+ 
+      --tag-bg:      rgba(255, 255, 255, 0.08);
+      --tag-text:    #7a7f92;
+ 
+      --card-bg:     rgba(255, 255, 255, 0.05);
+      --card-hover:  rgba(255, 255, 255, 0.09);
+ 
+      --font-display: 'DM Serif Display', serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+ 
+ 
+    /* Reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+ 
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      position: relative;
+      overflow-x: hidden;
+      background-image: url('background_image.png');
+      background-size: cover;
+      background-position: center right;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+ 
+ 
+    /* Background: Orbs + Grid + Scanline */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+ 
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      will-change: transform;
+    }
+ 
+    .orb-1 {
+      width: 520px;
+      height: 520px;
+      top: -160px;
+      left: -140px;
+      background: radial-gradient(circle, #0d2240 0%, #060e1a 55%, transparent 100%);
+      opacity: 0.75;
+      animation: orb1 24s ease-in-out infinite;
+    }
+ 
+    .orb-2 {
+      width: 420px;
+      height: 420px;
+      bottom: -120px;
+      right: -100px;
+      background: radial-gradient(circle, #13181f 0%, #0a0c10 55%, transparent 100%);
+      opacity: 0.8;
+      animation: orb2 30s ease-in-out infinite;
+    }
+ 
+    .orb-3 {
+      width: 300px;
+      height: 300px;
+      top: 38%;
+      left: 55%;
+      background: radial-gradient(circle, #0c1d30 0%, #070d18 60%, transparent 100%);
+      opacity: 0.5;
+      animation: orb3 20s ease-in-out infinite;
+    }
+ 
+    @keyframes orb1 {
+      0%   { transform: translate(0px, 0px) scale(1); }
+      33%  { transform: translate(40px, 30px) scale(1.06); }
+      66%  { transform: translate(15px, 55px) scale(0.97); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
+ 
+    @keyframes orb2 {
+      0%   { transform: translate(0px, 0px) scale(1); }
+      40%  { transform: translate(-45px, -30px) scale(1.05); }
+      80%  { transform: translate(-20px, -10px) scale(0.96); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
+ 
+    @keyframes orb3 {
+      0%   { transform: translate(0px, 0px); }
+      30%  { transform: translate(-25px, 20px); }
+      70%  { transform: translate(20px, -25px); }
+      100% { transform: translate(0px, 0px); }
+    }
+ 
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+ 
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+ 
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: rise linear infinite;
+      opacity: 0;
+    }
+ 
+    @keyframes rise {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      8%   { opacity: 1; }
+      85%  { opacity: 0.4; }
+      100% { transform: translateY(-100vh) translateX(var(--drift, 0px)); opacity: 0; }
+    }
+ 
+    .scanline {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(60, 100, 160, 0.15) 30%,
+        rgba(80, 120, 180, 0.22) 50%,
+        rgba(60, 100, 160, 0.15) 70%,
+        transparent 100%
+      );
+      z-index: 0;
+      pointer-events: none;
+      animation: scanline 14s ease-in-out infinite;
+      opacity: 0;
+    }
+ 
+    @keyframes scanline {
+      0%   { top: -2px; opacity: 0; }
+      5%   { opacity: 1; }
+      92%  { opacity: 0.5; }
+      100% { top: 100vh; opacity: 0; }
+    }
+ 
+ 
+    /* Layout principal */
+    .page {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 480px;
+      padding: 60px 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      flex: 1;
+    }
+ 
+ 
+    /* Icon */
+    .avatar-wrapper {
+      width: 130px;
+      height: 130px;
+      border-radius: var(--radius-avatar);
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      border: none;
+      
+      /* anel sutil sem borda visivel, shadow interna */
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 8px 32px rgba(0,0,0,0.5);
+    }
+ 
+    /* Div do icon */
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+    }
+ 
+ 
+    /* NOME */
+    .profile-name {
+      margin-top: 20px;
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--text-name);
+      letter-spacing: -0.3px;
+      text-align: center;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+ 
+ 
+    /* Descrição + Tags*/
+    .profile-bio {
+      margin-top: 10px;
+      font-size: 13.5px;
+      color: white;
+      text-align: center;
+      line-height: 1.65;
+      max-width: 320px;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+ 
+    .tags {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+ 
+    .tag {
+      background: var(--tag-bg);
+      color: white;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.3px;
+ 
+      /* sem borda visivel */
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.07);
+    }
+
+    /* Links*/
+    .links {
+      margin-top: 32px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+ 
+    .link-item {
+      display: flex;
+      align-items: center;
+      border: solid 1px white;
+      gap: 120px;
+      padding: 14px 20px;
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border-radius: 8px;
+      text-decoration: none;
+ 
+      /* anel quase invisivel */
+
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+      
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+ 
+    .link-item:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+ 
+    .link-emoji {
+      font-size: 18px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+ 
+    .link-text {
+      font-size: 17px;
+      font-weight: 400;
+      color: white;
+      letter-spacing: 0.1px;
+    }
+ 
+ 
+    /* FOOTER*/
+    footer {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 480px;
+      margin-top: 48px;
+      padding: 20px 24px 32px;
+      text-align: center;
+    }
+ 
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 0 auto 16px;
+    }
+ 
+    .footer-text {
+      font-size: 12px;
+      color: white;
+      letter-spacing: 0.3px;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+ 
+    .footer-text a {
+      color: var(--text-footer);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+ 
+    .footer-text a:hover {
+      color: var(--text-bio);
+    }
+ 
+ 
+    /* Animação de entrada*/
+    .avatar-wrapper,
+    .profile-name,
+    .profile-bio,
+    .tags,
+    .links,
+    footer {
+      animation: fadeUp 0.6s ease both;
+    }
+ 
+    .profile-name  { animation-delay: 0.05s; }
+    .profile-bio   { animation-delay: 0.1s;  }
+    .tags          { animation-delay: 0.15s; }
+    .links         { animation-delay: 0.2s;  }
+    footer         { animation-delay: 0.28s; }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+ 
+  </style>
+</head>
+<body>
+ 
+  <!-- Background -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="particles" id="particles"></div>
+  <div class="scanline"></div>
+ 
+ 
+  <!-- Conteudo principal -->
+  <main class="page">
+ 
+    <!-- Icon -->
+    <div class="avatar-wrapper">
+      <img src="makima_icon.png" alt="Minha foto" />
+    </div>
+ 
+    <!-- Nome -->
+    <h1 class="profile-name">! Morango 苺</h1>
+ 
+    <!-- Biografia + Tags -->
+    <p class="profile-bio">
+      Desenvolvedor apaixonado e curioso em descobrir detalhes de pessoas, falhas em sistemas e criar algoritmos clichês por hobby. Focado em back-end, cibersegurança e OSINT.
+    </p>
+ 
+    <div class="tags">
+      <span class="tag">Back-end Dev</span>
+      <span class="tag">Cibersecurity</span>
+      <span class="tag">Open Source</span>
+      <span class="tag">Freelancer</span>
+      <span class="tag">OSINT</span>
+      <span class="tag">Geek</span>
+    </div>
+ 
+    <!-- Links -->
+    <div class="links">
+ 
+      <a class="link-item" href="https://github.com/Vinicius-Luiz07" target="_blank" rel="noopener">
+        <span class="link-emoji">
+            <img src="icon_github.png" alt="Logo Github" width="50px" height="50px">
+        </span>
+        <span class="link-text">Github</span>
+      </a>
+ 
+      <a class="link-item" href="https://www.linkedin.com/in/vinicius-luiz-cyber/" target="_blank" rel="noopener">
+        <span class="link-emoji">
+            <img src="icon_linkedin.png" alt="Icon Linkedin" width="45px" height="45px">
+        </span>
+        <span class="link-text">Linkedin</span>
+      </a>
+ 
+      <a class="link-item" href="https://discordapp.com/users/747220407068786721" target="_blank" rel="noopener">
+        <span class="link-emoji">
+            <img src="icon_discord.png" alt="IconDiscord" width="45px" height="45px">
+        </span>
+        <span class="link-text">Discord</span>
+      </a>
+ 
+      <a class="link-item" href="mailto:viniciusluiz8058@gmail.com?subject=mensagem%20via%20site&body=oi, esquisitinho.">
+        <span class="link-emoji">
+            <img src="icon_email.png" alt="Icon E-mail" width="45px" height="45px"></span>
+        <span class="link-text">E-mail</span>
+      </a>
+ 
+      <a class="link-item" href="https://steamcommunity.com/profiles/76561199296382445/" target="_blank" rel="noopener">
+        <span class="link-emoji">
+            <img src="icon_steam.png" alt="Icon Steam" width="45px" height="45px">
+        </span>
+        <span class="link-text">Steam</span>
+      </a>
+      
+      <a class="link-item" href="https://open.spotify.com/user/wa0yvfm0ickvhwc8nm12as5tb?si=d664fcccca8c42e2" target="_blank" rel="noopener">
+        <span class="link-emoji">
+          <img src="icon_spotify.jpg" alt="Icon Spotify" width="45px" height="45px">
+        </span>
+        <span class="link-text">Spotify</span>
+      </a>
+
+    </div>
+ 
+  </main>
+ 
+ 
+  <!-- Footer -->
+  <footer>
+    <div class="footer-divider"></div>
+    <p class="footer-text">
+      "É mais facil entender um computador, que uma pessoa..."
+    </p>
+  </footer>
+ 
+ 
+  <!-- Particulas -->
+  <script>
+    const container = document.getElementById('particles')
+    const shades = ['#1e2a3a', '#2a3040', '#1a2235', '#222830']
+ 
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div')
+      p.className = 'particle'
+ 
+      const size = Math.random() * 2 + 1
+ 
+      p.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${Math.random() * 100}%;
+        bottom: -10px;
+        background: ${shades[Math.floor(Math.random() * shades.length)]};
+        --drift: ${(Math.random() - 0.5) * 60}px;
+        animation-duration: ${Math.random() * 14 + 10}s;
+        animation-delay: ${Math.random() * 12}s;
+      `
+ 
+      container.appendChild(p)
+    }
+  </script>
+</body>
+</html>
