@@ -6,8 +6,8 @@
   - Redes socias
   - Animação utilizando JavaScript & CSS
 <br>
-- Próxima atualização...
-
+- Próxima atualização:
+  - Adaptar corretamente para a UI do smartphone
 ---
 
 ## Objetivo:
