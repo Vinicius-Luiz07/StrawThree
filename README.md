@@ -21,3 +21,7 @@ A finalidade desse projeto em si, é aprimorar minhas habilidades com `HTML`, `C
   - Lógica de programação com JavaScript
   - Web Design
   - Raciocínio lógico
+---
+
+## Acesso rápido: 
+  - https://vinicius-luiz07.github.io/StrawThree/
